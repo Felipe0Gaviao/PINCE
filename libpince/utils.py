@@ -22,6 +22,7 @@ from keystone import Ks, KsError, KS_ARCH_X86, KS_MODE_32, KS_MODE_64
 from collections import OrderedDict
 from importlib.machinery import SourceFileLoader
 from pygdbmi import gdbmiparser
+from typing import Generator
 
 # Capstone initialization
 cs_32 = Cs(CS_ARCH_X86, CS_MODE_32)
@@ -59,20 +60,18 @@ def get_process_name(pid: int | str) -> str:
         return f.read().splitlines()[0]
 
 
-def search_processes(process_name):
-    """Searches processes and returns a list of the ones that contain process_name
+def search_processes(process: str) -> Generator[tuple[str, str, str]]:
+    """Searches processes and returns a list of the ones that contain process name or PID
 
     Args:
-        process_name (str): Name of the process that'll be searched for
+        process (str): Name or PID of the process that'll be searched for
 
-    Returns:
-        list: List of (pid, user, process_name) -> (str, str, str)
+    Yields:
+        Generator[tuple[str, str, str]]: Tuple with the process pid, user and name
     """
-    processlist = []
     for pid, user, name in get_process_list():
-        if process_name.lower() in name.lower():
-            processlist.append((pid, user, name))
-    return processlist
+        if process.lower() in name.lower():
+            yield pid, user, name
 
 
 def get_regions(pid):
