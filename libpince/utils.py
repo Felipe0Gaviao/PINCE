@@ -70,7 +70,7 @@ def search_processes(process: str) -> Generator[tuple[str, str, str], None, None
         Generator[tuple[str, str, str], None, None]: Tuple with the process pid, user and name
     """
     for pid, user, name in get_process_list():
-        if process.lower() in name.lower():
+        if process.lower() in name.lower() or process in pid:
             yield pid, user, name
 
 
