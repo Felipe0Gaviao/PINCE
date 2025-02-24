@@ -60,14 +60,14 @@ def get_process_name(pid: int | str) -> str:
         return f.read().splitlines()[0]
 
 
-def search_processes(process: str) -> Generator[tuple[str, str, str]]:
+def search_processes(process: str) -> Generator[tuple[str, str, str], None, None]:
     """Searches processes and returns a list of the ones that contain process name or PID
 
     Args:
         process (str): Name or PID of the process that'll be searched for
 
     Yields:
-        Generator[tuple[str, str, str]]: Tuple with the process pid, user and name
+        Generator[tuple[str, str, str], None, None]: Tuple with the process pid, user and name
     """
     for pid, user, name in get_process_list():
         if process.lower() in name.lower():
